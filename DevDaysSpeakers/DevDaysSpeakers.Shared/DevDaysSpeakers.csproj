@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <MinimumVisualStudioVersion>10.0</MinimumVisualStudioVersion>
@@ -48,7 +48,6 @@
     <Compile Include="Model\Speaker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AzureService.cs" />
-    <Compile Include="ViewModel\AppBootstrapper.cs" />
     <Compile Include="ViewModel\DetailsViewModel.cs" />
     <Compile Include="ViewModel\SpeakersViewModel.cs" />
     <Compile Include="View\DetailsPage.xaml.cs">
@@ -57,6 +56,7 @@
     <Compile Include="View\SpeakersPage.xaml.cs">
       <DependentUpon>SpeakersPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\MainNavigationViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

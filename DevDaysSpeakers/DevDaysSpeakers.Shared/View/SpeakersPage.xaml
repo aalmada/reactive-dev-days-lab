@@ -1,40 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
-<reactive:ReactiveContentPage
-    xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:reactive="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms"
-    xmlns:xamvvm="clr-namespace:Xamvvm;assembly=Xamvvm.Forms.RxUI"
-    xmlns:local="clr-namespace:DevDaysSpeakers.ViewModel;assembly=DevDaysSpeakers"
-    x:Class="DevDaysSpeakers.View.SpeakersPage"
-    x:TypeArguments="local:SpeakersViewModel"
-    Title="Speakers"
-    x:Name="ThePage">
-
-    <reactive:ReactiveContentPage.BindingContext>
-        <local:SpeakersViewModel />
-    </reactive:ReactiveContentPage.BindingContext>
-
-    <reactive:ReactiveContentPage.Padding>
-        <OnPlatform x:TypeArguments="Thickness"
-            iOS="0, 20, 0, 0" />
-    </reactive:ReactiveContentPage.Padding>
-
-    <reactive:ReactiveContentPage.Content>
-        <StackLayout Spacing="0">
-            <Button Text="Sync Speakers" Command="{Binding GetSpeakers}"/>
-
-            <ActivityIndicator IsRunning="{Binding IsBusy}" IsVisible="{Binding IsBusy}"/>
-
-            <ListView x:Name="ListViewSpeakers"
-              ItemsSource="{Binding Speakers}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ImageCell Text="{Binding Name}"
-                             Detail="{Binding Title}"
-                             ImageSource="{Binding Avatar}"/>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
-    </reactive:ReactiveContentPage.Content>
+<?xml version="1.0" encoding="utf-8"?>
+<reactive:ReactiveContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
+	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+	xmlns:reactive="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms" 
+	xmlns:xamvvm="clr-namespace:Xamvvm;assembly=Xamvvm.Forms.RxUI" 
+	xmlns:local="clr-namespace:DevDaysSpeakers.ViewModel;assembly=DevDaysSpeakers" 
+	x:Class="DevDaysSpeakers.View.SpeakersPage" 
+	x:TypeArguments="local:SpeakersViewModel" 
+	Title="Speakers" 
+	x:Name="ThePage">
+	<reactive:ReactiveContentPage.Padding>
+		<OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
+	</reactive:ReactiveContentPage.Padding>
+	<reactive:ReactiveContentPage.Content>
+		<StackLayout Spacing="0">
+			<Button x:Name="SyncSpeakers" Text="Sync Speakers" />
+			<ActivityIndicator x:Name="IsBusy" />
+			<ListView x:Name="ListViewSpeakers">
+				<ListView.ItemTemplate>
+					<DataTemplate>
+						<ImageCell Text="{Binding Name}" Detail="{Binding Title}" ImageSource="{Binding Avatar}" />
+					</DataTemplate>
+				</ListView.ItemTemplate>
+			</ListView>
+		</StackLayout>
+	</reactive:ReactiveContentPage.Content>
 </reactive:ReactiveContentPage>

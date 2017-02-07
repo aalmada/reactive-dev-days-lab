@@ -5,36 +5,30 @@ using Xamvvm;
 
 namespace DevDaysSpeakers
 {
-    public class App : Application
-    {
-        public AppBootstrapper AppBootstrapper { get; }
+	public class App : Application
+	{
+		public App()
+		{
+			var factory = new XamvvmFormsRxUIFactory(this);
+			XamvvmCore.SetCurrentFactory(factory);
+			factory.RegisterNavigationPage<MainNavigationViewModel>(() => this.GetPageFromCache<SpeakersViewModel>());
 
-        public App()
-        {
-            // The root page of your application
-            var content = new SpeakersPage();
+			MainPage = XamvvmCore.CurrentFactory.GetPageFromCache<MainNavigationViewModel>() as Page;
+		}
 
-            AppBootstrapper = new AppBootstrapper();
+		protected override void OnStart()
+		{
+			// Handle when your app starts
+		}
 
-            var factory = new XamvvmFormsRxUIFactory(this);
-            XamvvmCore.SetCurrentFactory(factory);
+		protected override void OnSleep()
+		{
+			// Handle when your app sleeps
+		}
 
-            MainPage = this.GetPageFromCache<SpeakersViewModel>() as Page;
-        }
-      
-        protected override void OnStart()
-        {
-            // Handle when your app starts
-        }
-
-        protected override void OnSleep()
-        {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
-        }
-    }
+		protected override void OnResume()
+		{
+			// Handle when your app resumes
+		}
+	}
 }
