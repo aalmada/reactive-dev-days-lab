@@ -14,9 +14,12 @@ namespace DevDaysSpeakers.View
 
 			this.WhenActivated(disposables =>
 			{
-				this.OneWayBind(ViewModel, x => x.Avatar, x => x.Avatar.Source, x => x).DisposeWith(disposables);
-				this.OneWayBind(ViewModel, x => x.Name, x => x.Name.Text).DisposeWith(disposables);
-				this.OneWayBind(ViewModel, x => x.Description, x => x.Description.Text).DisposeWith(disposables);
+				this.OneWayBind(ViewModel, vm => vm.Avatar, page => page.Avatar.Source, x => x)
+                    .DisposeWith(disposables);
+				this.OneWayBind(ViewModel, vm => vm.Name, page => page.Name.Text)
+                    .DisposeWith(disposables);
+				this.OneWayBind(ViewModel, vm => vm.Description, page => page.Description.Text)
+                    .DisposeWith(disposables);
 			});
 		}
 	}

@@ -14,11 +14,16 @@ namespace DevDaysSpeakers.View
 
             this.WhenActivated(disposables =>
             {
-				this.OneWayBind(ViewModel, x => x.Speakers, x => x.ListViewSpeakers.ItemsSource).DisposeWith(disposables);
-				this.OneWayBind(ViewModel, x => x.GetSpeakers, x => x.SyncSpeakers.Command).DisposeWith(disposables);
-				this.OneWayBind(ViewModel, x => x.IsBusy, x => x.IsBusy.IsVisible).DisposeWith(disposables);
-				this.OneWayBind(ViewModel, x => x.IsBusy, x => x.IsBusy.IsEnabled).DisposeWith(disposables);
-				this.Bind(ViewModel, x => x.Speaker, x => x.ListViewSpeakers.SelectedItem).DisposeWith(disposables);
+				this.OneWayBind(ViewModel, vm => vm.Speakers, page => page.ListViewSpeakers.ItemsSource)
+                    .DisposeWith(disposables);
+				this.OneWayBind(ViewModel, vm => vm.GetSpeakers, page => page.SyncSpeakers.Command)
+                    .DisposeWith(disposables);
+				this.OneWayBind(ViewModel, vm => vm.IsBusy, page => page.IsBusy.IsVisible)
+                    .DisposeWith(disposables);
+				this.OneWayBind(ViewModel, vm => vm.IsBusy, page => page.IsBusy.IsEnabled)
+                    .DisposeWith(disposables);
+				this.Bind(ViewModel, vm => vm.Speaker, page => page.ListViewSpeakers.SelectedItem)
+                    .DisposeWith(disposables);
             });
         }
     }

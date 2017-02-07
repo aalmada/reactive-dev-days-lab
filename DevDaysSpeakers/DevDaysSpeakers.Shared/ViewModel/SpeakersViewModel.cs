@@ -26,8 +26,6 @@ namespace DevDaysSpeakers.ViewModel
 
 		public ReactiveCommand<Unit, IEnumerable<Speaker>> GetSpeakers { get; }
 
-		public ReactiveCommand GoToDetails { get; }
-
 		readonly ObservableAsPropertyHelper<bool> busy;
 		public bool IsBusy => busy.Value;
 
