@@ -10,63 +10,67 @@ using Microsoft.WindowsAzure.MobileServices.Sync;
 using System.Threading.Tasks;
 using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using System.Diagnostics;
+using System.Reactive;
+using System.Reactive.Linq;
+using System.Reactive.Disposables;
 
 [assembly: Dependency(typeof(AzureService))]
 namespace DevDaysSpeakers.Services
 {
     public class AzureService
     {
-        public MobileServiceClient Client { get; set; } = null;
+        const string appUrl = "https://montemagnospeakers.azurewebsites.net";
+
+        MobileServiceClient Client { get; set; } = null;
         IMobileServiceSyncTable<Speaker> table;
 
-        public async Task Initialize()
+        IObservable<Unit> Initialize()
         {
-            if (Client?.SyncContext?.IsInitialized ?? false)
-                return;
+            return Observable.Return(Unit.Default)
+                .Select(_ =>
+                {
+                    if (Client?.SyncContext?.IsInitialized ?? false)
+                        return Observable.Return(Unit.Default);
 
-            var appUrl = "https://montemagnospeakers.azurewebsites.net";
+                    //Create our client
+                    Client = new MobileServiceClient(appUrl);
 
-            //Create our client
-            Client = new MobileServiceClient(appUrl);
+                    //InitialzeDatabase for path
+                    var path = Path.Combine(MobileServiceClient.DefaultDatabasePath, "syncstore.db");
 
-            //InitialzeDatabase for path
-            var path = "syncstore.db";
-            path = Path.Combine(MobileServiceClient.DefaultDatabasePath, path);
+                    //setup our local sqlite store and intialize our table
+                    var store = new MobileServiceSQLiteStore(path);
 
+                    //Define table
+                    store.DefineTable<Speaker>();
 
-            //setup our local sqlite store and intialize our table
-            var store = new MobileServiceSQLiteStore(path);
-
-            //Define table
-            store.DefineTable<Speaker>();
-
-            //Initialize SyncContext
-            await Client.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler());
-
-            //Get our sync table that will call out to azure
-            table = Client.GetSyncTable<Speaker>();
+                    return Observable.Start(() => Client.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler()))
+                        .SelectMany(__ => Observable.Start(() =>
+                        {
+                            //Get our sync table that will call out to azure
+                            table = Client.GetSyncTable<Speaker>();
+                        }));
+                })
+                .Switch();
         }
 
-        public async Task<IEnumerable<Speaker>> GetSpeakers()
+        public IObservable<IEnumerable<Speaker>> GetSpeakers()
         {
-            await Initialize();
-            await SyncSpeakers();
-            return await table.OrderBy(s => s.Name).ToEnumerableAsync();
+            return Initialize()
+                .SelectMany(_ => SyncSpeakers(Client, table))
+                .SelectMany(_ => Observable.StartAsync(() => table.OrderBy(s => s.Name).ToEnumerableAsync()));
         }
 
-
-        public async Task SyncSpeakers()
+        public static IObservable<Unit> SyncSpeakers(MobileServiceClient client, IMobileServiceSyncTable<Speaker> table)
         {
-            try
-            {
-                await Client.SyncContext.PushAsync();
-                await table.PullAsync("allSpeakers", table.CreateQuery());
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Unable to sync speakers, that is alright as we have offline capabilities: " + ex);
-            }
-
+            return Observable.StartAsync(() => client.SyncContext.PushAsync())
+                .SelectMany(_ => Observable.StartAsync(() => client.SyncContext.PushAsync()))
+                .SelectMany(_ => Observable.StartAsync(() => table.PullAsync("allSpeakers", table.CreateQuery())))
+                .Catch<Unit, Exception>(ex =>
+                {
+                    Debug.WriteLine("Unable to sync speakers, that is alright as we have offline capabilities: " + ex);
+                    return Observable.Return(Unit.Default);
+                });
         }
     }
 }

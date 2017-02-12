@@ -39,11 +39,10 @@ namespace DevDaysSpeakers.ViewModel
 		{
 			var service = azureService ?? DependencyService.Get<AzureService>();
 
-			GetSpeakers = ReactiveCommand.CreateFromTask(_ => service.GetSpeakers());
+			GetSpeakers = ReactiveCommand.CreateFromObservable(() => service.GetSpeakers());
 
 			GetSpeakers
 				.ObserveOn(RxApp.MainThreadScheduler)
-				.SubscribeOn(RxApp.MainThreadScheduler)
 				.Subscribe(speakers =>
 				{
 					Speakers.Clear();
@@ -63,9 +62,9 @@ namespace DevDaysSpeakers.ViewModel
 
 			this.ThrownExceptions
 				.Subscribe(ex =>
-			{
-				Debug.WriteLine(ex.Message);
-			});
+			    {
+				    Debug.WriteLine(ex.Message);
+			    });
 		}
 	}
 }
