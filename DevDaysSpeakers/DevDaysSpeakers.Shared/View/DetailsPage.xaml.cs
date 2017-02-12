@@ -20,7 +20,11 @@ namespace DevDaysSpeakers.View
                     .DisposeWith(disposables);
 				this.OneWayBind(ViewModel, vm => vm.Description, page => page.Description.Text)
                     .DisposeWith(disposables);
-			});
+                this.OneWayBind(ViewModel, vm => vm.Speak, page => page.Speak.Command)
+                    .DisposeWith(disposables);
+                this.OneWayBind(ViewModel, vm => vm.VisitWebSite, page => page.VisitWebSite.Command)
+                    .DisposeWith(disposables);
+            });
 		}
 	}
 }

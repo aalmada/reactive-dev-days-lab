@@ -12,7 +12,7 @@ using Microsoft.WindowsAzure.MobileServices.SQLiteStore;
 using System.Diagnostics;
 using System.Reactive;
 using System.Reactive.Linq;
-using System.Reactive.Disposables;
+using System.Reactive.Threading.Tasks;
 
 [assembly: Dependency(typeof(AzureService))]
 namespace DevDaysSpeakers.Services
@@ -44,7 +44,7 @@ namespace DevDaysSpeakers.Services
                     //Define table
                     store.DefineTable<Speaker>();
 
-                    return Observable.Start(() => Client.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler()))
+                    return Client.SyncContext.InitializeAsync(store, new MobileServiceSyncHandler()).ToObservable()
                         .SelectMany(__ => Observable.Start(() =>
                         {
                             //Get our sync table that will call out to azure
@@ -58,14 +58,14 @@ namespace DevDaysSpeakers.Services
         {
             return Initialize()
                 .SelectMany(_ => SyncSpeakers(Client, table))
-                .SelectMany(_ => Observable.StartAsync(() => table.OrderBy(s => s.Name).ToEnumerableAsync()));
+                .SelectMany(_ => table.OrderBy(s => s.Name).ToEnumerableAsync().ToObservable());
         }
 
         public static IObservable<Unit> SyncSpeakers(MobileServiceClient client, IMobileServiceSyncTable<Speaker> table)
         {
-            return Observable.StartAsync(() => client.SyncContext.PushAsync())
-                .SelectMany(_ => Observable.StartAsync(() => client.SyncContext.PushAsync()))
-                .SelectMany(_ => Observable.StartAsync(() => table.PullAsync("allSpeakers", table.CreateQuery())))
+            return client.SyncContext.PushAsync().ToObservable()
+                .SelectMany(_ => client.SyncContext.PushAsync().ToObservable())
+                .SelectMany(_ => table.PullAsync("allSpeakers", table.CreateQuery()).ToObservable())
                 .Catch<Unit, Exception>(ex =>
                 {
                     Debug.WriteLine("Unable to sync speakers, that is alright as we have offline capabilities: " + ex);
