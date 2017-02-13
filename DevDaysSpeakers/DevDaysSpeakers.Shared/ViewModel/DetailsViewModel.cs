@@ -19,14 +19,6 @@ namespace DevDaysSpeakers.ViewModel
             set { this.RaiseAndSetIfChanged(ref speaker, value); }
         }
 
-        public string Name => Speaker.Name;
-
-        public string Title => Speaker.Title;
-
-        public string Description => Speaker.Description;
-
-        public string Avatar => Speaker.Avatar;
-
         public ReactiveCommand Speak { get; }
 
         public ReactiveCommand VisitWebSite { get; }
