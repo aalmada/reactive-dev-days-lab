@@ -64,7 +64,6 @@ namespace DevDaysSpeakers.Services
         public static IObservable<Unit> SyncSpeakers(MobileServiceClient client, IMobileServiceSyncTable<Speaker> table)
         {
             return client.SyncContext.PushAsync().ToObservable()
-                .SelectMany(_ => client.SyncContext.PushAsync().ToObservable())
                 .SelectMany(_ => table.PullAsync("allSpeakers", table.CreateQuery()).ToObservable())
                 .Catch<Unit, Exception>(ex =>
                 {
