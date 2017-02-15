@@ -2,15 +2,15 @@
 <reactive:ReactiveContentPage xmlns="http://xamarin.com/schemas/2014/forms" 
 	xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
 	xmlns:reactive="clr-namespace:ReactiveUI.XamForms;assembly=ReactiveUI.XamForms" 
-	xmlns:xamvvm="clr-namespace:Xamvvm;assembly=Xamvvm.Forms.RxUI" 
 	xmlns:local="clr-namespace:DevDaysSpeakers.ViewModel;assembly=DevDaysSpeakers" 
 	x:Class="DevDaysSpeakers.View.DetailsPage" 
 	x:TypeArguments="local:DetailsViewModel" 
-	Title="Details" 
-	x:Name="ThePage">
-	<reactive:ReactiveContentPage.Padding>
+	Title="Details">
+    
+    <reactive:ReactiveContentPage.Padding>
 		<OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" />
 	</reactive:ReactiveContentPage.Padding>
+    
 	<reactive:ReactiveContentPage.Content>
 		<ScrollView Padding="10">
 			<StackLayout Spacing="10">
@@ -18,8 +18,8 @@
 				<Label x:Name="Name" FontSize="24" />
 				<Label x:Name="Title" TextColor="Purple" />
 				<Label x:Name="Description" />
-				<Button Text="Speak" x:Name="Speak" />
-				<Button Text="Go to Website" x:Name="VisitWebSite" />
+                <Button x:Name="Speak" Text="Speak" />
+                <Button x:Name="VisitWebSite" Text="Go to Website" />
 			</StackLayout>
 		</ScrollView>
 	</reactive:ReactiveContentPage.Content>
