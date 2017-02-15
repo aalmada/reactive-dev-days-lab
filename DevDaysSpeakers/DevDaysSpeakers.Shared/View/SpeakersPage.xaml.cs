@@ -1,11 +1,13 @@
-﻿using System.Reactive.Disposables;
-using DevDaysSpeakers.ViewModel;
+﻿using DevDaysSpeakers.ViewModel;
 using ReactiveUI;
+using System.Reactive;
+using System.Reactive.Disposables;
+using System.Reactive.Linq;
 using Xamvvm;
 
 namespace DevDaysSpeakers.View
 {
-	public partial class SpeakersPage 
+    public partial class SpeakersPage 
         : IBasePageRxUI<SpeakersViewModel>
     {
         public SpeakersPage()
@@ -24,6 +26,13 @@ namespace DevDaysSpeakers.View
                     .DisposeWith(disposables);
 				this.Bind(ViewModel, vm => vm.Speaker, page => page.ListViewSpeakers.SelectedItem)
                     .DisposeWith(disposables);
+
+                // show dialog on connection error
+                ViewModel.ConnectionError.RegisterHandler(interaction =>
+                    Observable.Start(async () => await this.DisplayAlert("Connection error", interaction.Input.Message, "OK"), RxApp.MainThreadScheduler)
+                    .Do(_ => interaction.SetOutput(Unit.Default))
+                )
+                .DisposeWith(disposables);
             });
         }
     }

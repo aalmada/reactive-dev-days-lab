@@ -29,7 +29,9 @@ namespace DevDaysSpeakers.ViewModel
 		readonly ObservableAsPropertyHelper<bool> busy;
 		public bool IsBusy => busy.Value;
 
-		public SpeakersViewModel()
+        public Interaction<Exception, Unit> ConnectionError { get; } = new Interaction<Exception, Unit>();
+
+        public SpeakersViewModel()
 			: this(null)
 		{
 
@@ -52,8 +54,9 @@ namespace DevDaysSpeakers.ViewModel
 			GetSpeakers.IsExecuting
 				.ToProperty(this, vm => vm.IsBusy, out busy);
 
-			GetSpeakers.ThrownExceptions
-				.Subscribe(error => Application.Current.MainPage.DisplayAlert("Error!", error.Message, "OK"));
+            GetSpeakers.ThrownExceptions
+                .SelectMany(error => ConnectionError.Handle(error))
+                .Subscribe();
 
 			// go to details page when Speaker is set
 			this.WhenAnyValue(vm => vm.Speaker)
