@@ -1,9 +1,8 @@
 ﻿using System.Reactive.Disposables;
-using DevDaysSpeakers.ViewModel;
 using ReactiveUI;
 using Xamvvm;
 
-namespace DevDaysSpeakers.View
+namespace DevDaysSpeakers.Features.Details
 {
 	public partial class DetailsPage
 		: IBasePageRxUI<DetailsViewModel>

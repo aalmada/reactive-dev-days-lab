@@ -1,11 +1,10 @@
-﻿using DevDaysSpeakers.ViewModel;
-using ReactiveUI;
+﻿using ReactiveUI;
 using System.Reactive;
 using System.Reactive.Disposables;
 using System.Reactive.Linq;
 using Xamvvm;
 
-namespace DevDaysSpeakers.View
+namespace DevDaysSpeakers.Features.Speakers
 {
     public partial class SpeakersPage 
         : IBasePageRxUI<SpeakersViewModel>

@@ -1,6 +1,4 @@
-﻿using DevDaysSpeakers.View;
-using DevDaysSpeakers.ViewModel;
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamvvm;
 
 namespace DevDaysSpeakers
@@ -11,7 +9,7 @@ namespace DevDaysSpeakers
 		{
 			var factory = new XamvvmFormsRxUIFactory(this);
 			XamvvmCore.SetCurrentFactory(factory);
-			factory.RegisterNavigationPage<MainNavigationViewModel>(() => this.GetPageFromCache<SpeakersViewModel>());
+			factory.RegisterNavigationPage<MainNavigationViewModel>(() => this.GetPageFromCache<Features.Speakers.SpeakersViewModel>());
 
 			MainPage = XamvvmCore.CurrentFactory.GetPageFromCache<MainNavigationViewModel>() as Page;
 		}

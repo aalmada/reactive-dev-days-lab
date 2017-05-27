@@ -10,12 +10,12 @@ using ReactiveUI;
 using Xamarin.Forms;
 using Xamvvm;
 
-namespace DevDaysSpeakers.ViewModel
+namespace DevDaysSpeakers.Features.Speakers
 {
 	public class SpeakersViewModel
 		: BasePageModelRxUI
 	{
-		public ReactiveList<Speaker> Speakers { get; } = new ReactiveList<Speaker>();
+		public IReactiveList<Speaker> Speakers { get; } = new ReactiveList<Speaker>();
 
 		Speaker speaker;
 		public Speaker Speaker
@@ -61,7 +61,7 @@ namespace DevDaysSpeakers.ViewModel
 			// go to details page when Speaker is set
 			this.WhenAnyValue(vm => vm.Speaker)
 				.Where(speaker => speaker != null)
-				.Subscribe(speaker => this.PushPageFromCacheAsync<DetailsViewModel>(vm => vm.Speaker = speaker));
+				.Subscribe(speaker => this.PushPageFromCacheAsync<Details.DetailsViewModel>(vm => vm.Speaker = speaker));
 
 			this.ThrownExceptions
 				.Subscribe(ex =>

@@ -7,7 +7,7 @@ using System.Reactive.Linq;
 using Xamarin.Forms;
 using Xamvvm;
 
-namespace DevDaysSpeakers.ViewModel
+namespace DevDaysSpeakers.Features.Details
 {
     public class DetailsViewModel
         : BasePageModelRxUI
